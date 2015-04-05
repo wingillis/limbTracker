@@ -30,18 +30,23 @@ accelerometer lowerRightLeg;
 accelerometer upperRightLeg;
 accelerometer upperLeftLeg;
 
+long timer1 = 0;
+
 void setup()
 {
     analogReadResolution(12);
     pinMode(muxByte1, OUTPUT);
     pinMode(muxByte2, OUTPUT);
     pinMode(muxByte3, OUTPUT);
-    Serial.begin(115200);
+    #ifdef SERIAL
+        Serial.begin(115200);
+    #endif
 
 }
 
 void loop() {
     // read in the values of each accelerometer
+    timer1 = millis();
     readAnalogInputs(lowerRightLeg, lowerRightLegInputs);
     averageInputs(lowerRightLeg, index_position);
     readAnalogInputs(lowerLeftLeg, lowerLeftLegInputs);
@@ -56,6 +61,7 @@ void loop() {
     averageInputs(upperRightLeg, index_position);
 
     #ifdef SERIAL
+        sendTimeInformation(timer1, millis(), "Reading 6 analog accelerometers");
         sendInformationToSerial();
     #endif
 

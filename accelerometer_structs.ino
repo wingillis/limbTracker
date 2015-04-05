@@ -41,6 +41,13 @@ void readFromMux() {
     // should I have a delay?
 }
 
+void sendTimeInformation(long timer, long currentTime, String activity) {
+    Serial.println("###########################");
+    Serial.println(sprintf("For %s"), activity);
+    Serial.println(sprintf("Timing takes %d", (currentTime - timer)));
+    Serial.println("###########################");
+}
+
 void sendInformationToSerial() {
     // currently this function only gives the x, y, z int values
     // of the accelerometers
