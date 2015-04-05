@@ -10,7 +10,9 @@ int muxInputSelect = 0;
 // use byteRead(muxInputSelect, [part of byte]) for output
 
 #define WINDOW_SIZE 10
+int index_position = 0;
 
+#define SERIAL
 // there are up to 10 accelerometers (some may be replaced with spi or i2c)
 // this means up to 30 analog inputs. Teensy supports up to 21
 int lowerLeftLegInputs[] = {A0, A1, A2}; // (x, y, z)
@@ -41,5 +43,24 @@ void setup()
 void loop() {
     // read in the values of each accelerometer
     readAnalogInputs(lowerRightLeg, lowerRightLegInputs);
+    averageInputs(lowerRightLeg, index_position);
+    readAnalogInputs(lowerLeftLeg, lowerLeftLegInputs);
+    averageInputs(lowerLeftLeg, index_position);
+    readAnalogInputs(lowerRightArm, lowerRightArmInputs);
+    averageInputs(lowerRightArm, index_position);
+    readAnalogInputs(lowerLeftArm, lowerLeftArmInputs);
+    averageInputs(lowerLeftArm, index_position);
+    readAnalogInputs(upperLeftLeg, upperLeftLegInputs);
+    averageInputs(upperLeftLeg, index_position);
+    readAnalogInputs(upperRightLeg, upperRightLegInputs);
+    averageInputs(upperRightLeg, index_position);
 
+    #ifdef SERIAL
+        sendInformationToSerial();
+    #endif
+
+
+
+    index_position++;
+    if(index_position >= WINDOW_SIZE) index_position = 0;
 }
